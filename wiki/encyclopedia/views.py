@@ -116,7 +116,13 @@ def edit_page(request):
     if content is None:
         return HttpResponseNotFound("Not found")
 
+    # Make form with initial title and content
+    form = PageForm(initial={'title': title, 'content': content})
+    # Set title disabled = True
+    form.disable_title()
+    
+
     # return form with initial title and content
     return render(request, "encyclopedia/edit_page.html", {
-        'form': PageForm(initial={'title': title, 'content': content})
+        'form': form
         })
