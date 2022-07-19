@@ -126,3 +126,6 @@ def edit_page(request):
     return render(request, "encyclopedia/edit_page.html", {
         'form': form
         })
+
+def random_page(request):
+    return HttpResponseRedirect(reverse('entry_page', args=(util.random_entry(), )))
