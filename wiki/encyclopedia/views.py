@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -21,9 +22,11 @@ def entry_page(request, title):
     # Checks if entry exists
     if content is None:
         return HttpResponseNotFound("Not found")
+    
+    
 
     return render(request, "encyclopedia/content.html", { 
-        "title": title.capitalize(), "content": content
+        "title": title, "content": content
         })
 
 
@@ -68,7 +71,7 @@ def new_page(request):
             # Get cleaned data
             title = form.cleaned_data.get('title')
             content = form.cleaned_data.get('content')
-            
+
             # if true create new page and redirect to new page, otherwise add error message
             if util.save_entry(title, content):
                 return HttpResponseRedirect(reverse('entry_page', args=(title,)))
@@ -77,3 +80,43 @@ def new_page(request):
 
 
     return render(request, "encyclopedia/new_page.html", { "form": PageForm()})
+
+
+def edit_page(request):
+
+    if request.method == 'POST':
+        # Make form from request post data
+        form = PageForm(request.POST)
+
+        if form.is_valid():
+            # Get cleaned data
+            title = form.cleaned_data.get('title')
+            content = form.cleaned_data.get('content')
+            
+            # Edit entry
+            util.edit_entry(title, content)
+
+            return HttpResponseRedirect(reverse('entry_page', args=(title, )))
+    
+    # if title doesnt exists
+    if 't' not in request.GET:
+        return HttpResponseRedirect(reverse('index'))
+
+    # Get title data
+    title = request.GET.get('t').strip()
+
+    # if title is empty
+    if len(title) == 0:
+        return HttpResponseRedirect(reverse('index'))
+
+    # Get content data
+    content = util.get_entry(title)
+
+    # Check if content exists
+    if content is None:
+        return HttpResponseNotFound("Not found")
+
+    # return form with initial title and content
+    return render(request, "encyclopedia/edit_page.html", {
+        'form': PageForm(initial={'title': title, 'content': content})
+        })
