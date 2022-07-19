@@ -27,10 +27,14 @@ def save_entry(title, content):
 
 def edit_entry(title, content):
     """
-    Edits an encyclopedia entry, given its title and Markdown 
+    Edits an encyclopedia entry, given its title and Markdown content.
+    Delete exist entry and create a new one.
     """
     filename = f"entries/{title}.md"
-    default_storage.delete(filename)
+    if default_storage.exists(filename):
+        default_storage.delete(filename)
+        default_storage.save(filename, ContentFile(content))
+    
 
     
 
