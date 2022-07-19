@@ -1,0 +1,29 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    New Page
+{% endblock %}
+
+{% block body %}
+    <div class="container w-100 text-center" style="max-width: 800px; float: left">
+    <h1>Create a page</h1>
+    <hr>
+    <form action="{% url 'new_page' %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+    {{ form }}
+    </div>
+    
+    <input type="submit" class="btn btn-success btn-lg" value="Create">
+    <hr>
+    {% if messages %}
+    
+        {% for message in messages %}
+        <small id="titleHelp" class="alert alert-{{ message.tags }}">{{ message }}</small>
+        {% endfor %}
+    
+    {% endif %}
+    </form>
+    </div>
+
+{% endblock %}
