@@ -1,8 +1,10 @@
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib import messages
 
 from . import util
+from encyclopedia.forms import PageForm
 
 # Main site
 def index(request):
@@ -53,3 +55,25 @@ def search(request):
         
 
 
+def new_page(request):
+
+    if request.method == 'POST':
+
+        # Make form from request post data
+        form = PageForm(request.POST)
+
+        # Check form valid
+        if form.is_valid():
+            
+            # Get cleaned data
+            title = form.cleaned_data.get('title')
+            content = form.cleaned_data.get('content')
+            
+            # if true create new page and redirect to new page, otherwise add error message
+            if util.save_entry(title, content):
+                return HttpResponseRedirect(reverse('entry_page', args=(title,)))
+            else:
+                messages.add_message(request, messages.ERROR, "A page with that title exists already!", extra_tags='danger')
+
+
+    return render(request, "encyclopedia/new_page.html", { "form": PageForm()})
