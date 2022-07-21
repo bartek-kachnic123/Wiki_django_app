@@ -1,4 +1,3 @@
-from http.client import HTTPResponse
 from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -118,8 +117,8 @@ def edit_page(request):
 
     # Make form with initial title and content
     form = PageForm(initial={'title': title, 'content': content})
-    # Set title disabled = True
-    form.disable_title()
+    # Set title field  readonly 
+    form.readonly_title()
     
 
     # return form with initial title and content
