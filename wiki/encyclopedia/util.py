@@ -1,5 +1,6 @@
 import re
 from random import choice
+from markdown import markdown
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -47,7 +48,7 @@ def get_entry(title):
     """
     try:
         f = default_storage.open(f"entries/{title}.md")
-        return f.read().decode("utf-8")
+        return markdown(f.read().decode("utf-8"))
     except FileNotFoundError:
         return None
 
