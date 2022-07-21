@@ -1,5 +1,2 @@
-# Python
-
-Python is a programming language that can be used both for writing **command-line scripts** or building **web applications**.
-
-Also used in games.
+<p>Python is a programming language that can be used both for writing <strong>command-line scripts</strong> or building <strong>web applications</strong>.</p>
+<p>Also used in games!</p>
